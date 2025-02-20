@@ -1,138 +1,37 @@
-<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TEAMROHIT45OFFICAL Streaming</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.3.5/shaka-player.compiled.min.js"></script>
-<style>
-  body {
-      background-color: black;
-      color: white;
-      text-align: center;
-  }
-  #videoContainer {
-      width: 80%;
-      margin: auto;
-  }
-  video {
-      width: 100%;
-      max-height: 80vh;
-  }
-  #telegramButton {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 378px;
-      height: 50px;
-      background: linear-gradient(90deg, darkblue, #001f3f);
-      color: white;
-      border-radius: 5px;
-      cursor: pointer;
-      margin: 20px auto;
-      font-size: 18px;
-      font-weight: bold;
-  }
-  #qualitySelect {
-      margin-top: 10px;
-      padding: 8px;
-      font-size: 16px;
-      background-color: #001f3f;
-      color: white;
-      border: none;
-      border-radius: 5px;
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>teamrohit45official - Video Player</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <style>
+        body { text-align: center; font-family: Arial, sans-serif; }
+        video { width: 80%; max-width: 800px; margin-top: 20px; }
+    </style>
 </head>
 <body>
-
-<h1>TEAMROHIT45OFFICAL Streaming</h1>
-
-<div id="videoContainer">
-  <video id="video" controls autoplay></video>
-  <select id="qualitySelect" onchange="changeQuality(this.value)">
-    <option value="auto">Auto Quality</option>
-  </select>
-</div>
-
-<script>
-  async function initShakaPlayer() {
-      if (!shaka.Player.isBrowserSupported()) {
-          console.error("Error: Your browser does not support Shaka Player.");
-          return;
-      }
-
-      const video = document.getElementById("video");
-      const player = new shaka.Player(video);
-
-      // Configure DRM (ClearKey)
-      player.configure({
-          drm: {
-              clearKeys: {
-                  "4a5191838da17a2ab771f4258fad347f:54b7a084437459368eed07d182ad644c"     
-  }
-          },
-          streaming: {
-              bufferingGoal: 10, // Reduce initial buffering time
-              rebufferingGoal: 5, // Minimize rebuffering
-              abr: { enabled: true } // Enable adaptive bitrate streaming
-          }
-      });
-
-      try {
-          await player.load("https://aba5sdmaaaaaaaamidug47tdi5buy.otte.live.cf.ww.aiv-cdn.net/pdx-nitro/live/clients/dash/enc/l0phze3ehz/out/v1/fe9782633a364a6a84c9410f26d9b2c4/cenc.mpd");
-          console.log("Video loaded successfully!");
-
-          // Populate quality selection dropdown
-          updateQualityOptions(player);
-      } catch (error) {
-          console.error("Error loading video:", error);
-      }
-  }
-
-  function updateQualityOptions(player) {
-      const tracks = player.getVariantTracks();
-      const qualitySelect = document.getElementById("qualitySelect");
-      qualitySelect.innerHTML = <option value="auto">Auto Quality</option>;
-
-      tracks.forEach((track) => {
-          let label = ${track.height}p (${track.bandwidth} bps);
-          let option = document.createElement("option");
-          option.value = track.id;
-          option.textContent = label;
-          qualitySelect.appendChild(option);
-      });
-  }
-
-  function changeQuality(trackId) {
-      const player = shaka.Player.getInstance();
-      if (!player) return;
-
-      if (trackId === "auto") {
-          player.configure({ abr: { enabled: true } }); // Enable Auto
-      } else {
-          player.configure({ abr: { enabled: false } }); // Disable Auto
-          player.selectVariantTrack(player.getVariantTracks().find(track => track.id == trackId), true);
-      }
-  }
-
-  document.addEventListener("DOMContentLoaded", initShakaPlayer);
-</script>
-
-<script>
-  if (confirm("Join Our Telegram Channel?")) { 
-      window.location.href = "https://t.me/+3aJFsq2EJLg4NzI1"; 
-  }
-</script>
-
-<div id="telegramButton" onclick="redirectToTelegram()">
-  Join Telegram
-</div>
-
-<script>
-  function redirectToTelegram() {
-      window.location.href = "https://t.me/+3aJFsq2EJLg4NzI1";
-  }
+    <h1>teamrohit45official - Video Player</h1>
+    <div id="video-container">
+        <video id="video" controls></video>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const video = document.getElementById('video');
+            const videoSrc = "https://aba5sdmaaaaaaaamidug47tdi5buy.otte.live.cf.ww.aiv-cdn.net/pdx-nitro/live/clients/dash/enc/l0phze3ehz/out/v1/fe9782633a364a6a84c9410f26d9b2c4/cenc.mpd";if (Hls.isSupported()) {
+            const hls = new Hls();
+            hls.loadSource(videoSrc);
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, function () {
+                video.play();
+            });
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = videoSrc;
+            video.addEventListener('loadedmetadata', function () {
+                video.play();
+            });
+        } else {
+            alert("Your browser does not support HLS.");
+        }
+    });
 </script>
 
 </body>
