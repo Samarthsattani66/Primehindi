@@ -1,3 +1,4 @@
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -6,22 +7,44 @@
     <style>
         body { text-align: center; font-family: Arial, sans-serif; }
         video { width: 80%; max-width: 800px; margin-top: 20px; }
+        select { margin-top: 10px; }
     </style>
 </head>
 <body>
-    <h1>teamrohit45official - Video Player</h1>
-    <div id="video-container">
-        <video id="video" controls></video>
-    </div>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const video = document.getElementById('video');
-            const videoSrc = "https://aba5sdmaaaaaaaamidug47tdi5buy.otte.live.cf.ww.aiv-cdn.net/pdx-nitro/live/clients/dash/enc/l0phze3ehz/out/v1/fe9782633a364a6a84c9410f26d9b2c4/cenc.mpd";if (Hls.isSupported()) {
+            let joinChannel = confirm("Join TEAMROHIT45OFFICIAL Telegram channel?");
+            if (joinChannel) {
+                window.location.href = "https://t.me/+3aJFsq2EJLg4NzI1";
+            }
+        });
+    </script><h1>teamrohit45official - Video Player</h1>
+<div id="video-container">
+    <video id="video" controls></video>
+    <select id="qualitySelector"></select>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const video = document.getElementById('video');
+        const videoSrc = "https://aba5sdmaaaaaaaamidug47tdi5buy.otte.live.cf.ww.aiv-cdn.net/pdx-nitro/live/clients/dash/enc/l0phze3ehz/out/v1/fe9782633a364a6a84c9410f26d9b2c4/cenc.mpd";
+        const qualitySelector = document.getElementById('qualitySelector');
+        
+        if (Hls.isSupported()) {
             const hls = new Hls();
             hls.loadSource(videoSrc);
             hls.attachMedia(video);
             hls.on(Hls.Events.MANIFEST_PARSED, function () {
-                video.play();
+                let levels = hls.levels;
+                levels.forEach((level, index) => {
+                    let option = document.createElement("option");
+                    option.value = index;
+                    option.text = level.height + "p";
+                    qualitySelector.appendChild(option);
+                });
+                
+                qualitySelector.addEventListener("change", function () {
+                    hls.currentLevel = qualitySelector.value;
+                });
             });
         } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
             video.src = videoSrc;
